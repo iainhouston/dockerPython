@@ -76,7 +76,7 @@ CMD [ "python3", "/src/test.py" ]
 
 This is what you do in the directory where your `Dockerfile` is, and where <my_namespace> is your Docker Hub Id / namespace (See next section). 
 
-```
+```bash
 $ docker build  -t <my_namespace>/testaction .
 
 $ docker  run -d  -p 0.0.0.0:8080:8080 <my_namespace>/testaction
