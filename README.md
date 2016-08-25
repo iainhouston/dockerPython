@@ -1,4 +1,4 @@
-# How to run a Python app as an OpenWhisk action
+# How to run a Python app as an OpenWhisk Docker action
 
 ## Execution model
 
@@ -12,23 +12,23 @@ Your Docker image has to start a HTTP server handling two requests:
 
 `test.py` is a proof-of-concept skeleton which you can use to see what gets passed between OpenWhisk and your action code and then can be developed by adapting the function  `wsk_run`  to perform what you really want to do.
 
-<!-- language: lang-python -->
-    from flask import Flask, jsonify, request
+```python
+from flask import Flask, jsonify, request
 
-    app = Flask(__name__)
+app = Flask(__name__)
 
-    @app.route('/init', methods=['POST'])
-    def wsk_init():
-      return ''
+@app.route('/init', methods=['POST'])
+def wsk_init():
+	return ''
 
-    @app.route('/run', methods=['POST'])
-    def wsk_run():
-      params = request.get_json(force=True)
-      # jsonify wraps json.dumps
-      return jsonify(params)
+@app.route('/run', methods=['POST'])
+def wsk_run():
+	params = request.get_json(force=True)
+	# jsonify wraps json.dumps
+	return jsonify(params)
 
-    app.run(host='0.0.0.0', port=8080)
-
+app.run(host='0.0.0.0', port=8080)
+```
 
 
 ### Notes 
