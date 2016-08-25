@@ -2,9 +2,9 @@
 
 ## Execution model
 
-A Docker action has to start an HTTP server that can handle two requests:
+An OpenWhisk Docker action has to start an HTTP server that can handle two requests:
 
--  **POST /init**: This endpoint is called after the container is started and is not important for Docker actions. It needs to be handled but just needs to respond with a 200.  
+-  **POST /init**: This endpoint is called after the container is started and is not used for Docker actions but it needs to be handled. It just needs to respond with a 200.  
 
 -  **POST /run**: This endpoint is called on action invocation. Invocation parameters are provided in the JSON body as a dictionary under the `value` key.
 
