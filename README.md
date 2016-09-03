@@ -82,7 +82,7 @@ $ docker build  -t <my_namespace>/testaction .
 
 $ docker  run -d  -p 0.0.0.0:8080:8080 <my_namespace>/testaction
 
-$ $ curl  -w  "%{http_code}\n"  -X POST  http://localhost:8080/init # => 200
+$ curl  -w  "%{http_code}\n"  -X POST  http://localhost:8080/init # => 200
 
 $ curl  -w  "%{http_code}\n"  -H "Content-Type: application/json" \
 -d '{"value":{"YOUR":"PAYLOAD"}}' http://localhost:8080/run # => 200 and JSON echo'd
