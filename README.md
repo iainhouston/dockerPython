@@ -2,9 +2,11 @@
 
 ## Execution model
 
-A recent (Sept 2016) update to the *Openwhisk* image `openwhisk/dockerskeleton` has simplified what we have to do to make a Python app inot an *OpenWhisk* Docker action by hiding from us any concern over the RESTful api behind the scenes.
+A recent (Sept 2016) update to the *Openwhisk* image `openwhisk/dockerskeleton` has simplified what we have to do to make a Python app into an *OpenWhisk* Docker action by hiding from us any concern over the RESTful api behind the scenes.
 
 All we have to do is to edit the `Dockerfile` and make sure our Python (2.7 right now) is accepting parameters and supplying outputs in the appropriate format.
+
+Note that this will be an Openwhisk *Docker* action. It may be simpler to have Openwhisk run your Python as a *Python action snippet*. However, by doing it in the way described below, you have the freedom to include application assets (data files and Python modules) in your action. 
 
 ## How to build the action
 
@@ -16,10 +18,10 @@ File `test.py` (or `whatever_name.py` you will use in your edited `Dockerfile` b
 
 -  Make sure it's executable (`chmod a+x test.py`).
 -  Make sure it's got the  shebang on line one.
--  Make sure it runs locally. 
-   e.g. `./test.py '{"tart":"tarty"}'`    
-       produces the JSON dictionary:    
-       `{"allparams": {"tart": "tarty", "myparam": "myparam default"}}`
+-  Make sure it runs locally.   
+   -  e.g. `./test.py '{"tart":"tarty"}'`    
+      produces the JSON dictionary:    
+      `{"allparams": {"tart": "tarty", "myparam": "myparam default"}}`
 
 ```python
 #!/usr/bin/env python
@@ -113,16 +115,21 @@ And in the other terminal window:
 ```bash
 $ wsk action create --docker tryaction my_namespace/skelpy
 $ wsk action invoke --blocking --result tryaction \
-  --param testString1 'Test String1' --param testString2 'test String2'
+  --param testString1 'Test String1' \
+  --param testString2 'test String2'
 ```
 
 where `tryaction` is whatever you want to call your *Openwhisk* action.
 
 and you should then get sufficient output to see:
 
-1. In the polling window:
 
-Something like:
+-   In the invoking window:  
+    -  how parameters are passed and the JSON string results your action returned.
+
+- In the polling window:
+
+    Something like:
 
 ```
 [
@@ -131,10 +138,7 @@ Something like:
 ]
 ```
 
-2. In the invoking window:  
-    -  how parameters are passed and the result responses your action returned.
-
 ## Disclaimer
 
-I am not employed by, or have any business relationships with any of the individuals or organisations I've mentioned on this page. (Although, I spent almost the last quarter of the previous century happily working at IBM's Hursley Lab.) I've written this as a record of my discovery and in the interests of the wider community and also because  I intend to use Bluemix and OpenWhisk in some 
+I am neither employed by, nor have any business relationships with any of the individuals or organisations I've mentioned on this page. (Although, I spent almost the last quarter of the previous century happily working at IBM's Hursley Lab.) I've written this as a record of my discovery and in the interests of the wider community and also because  I intend to use Bluemix and OpenWhisk in some 
 current an future projects.
