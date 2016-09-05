@@ -1,22 +1,19 @@
-# python-setuptools couldn't be found on xenial and trusty-curl was not found either
-FROM ubuntu:xenial
+# Dockerfile for Python whisk docker action
+FROM openwhisk/dockerskeleton
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-		ca-certificates \
-		curl \
-		wget 
+ENV FLASK_PROXY_PORT 8080
 
-# Install Python Setuptools
-RUN apt-get install -y python3-setuptools python3-pip
-RUN pip3 install --upgrade pip
+# Install our action's Python dependencies
+ADD requirements.txt /action/requirements.txt
+RUN cd /action; pip install -r requirements.txt
 
-# Add and install Python modules
-ADD requirements.txt /src/requirements.txt
-RUN cd /src; pip3 install -r requirements.txt
+# Ensure source assets are not drawn from the cache 
+# after this date
+ENV REFRESHED_AT 2016-09-05T13:59:39Z
+# Add all source assets
+ADD . /action
+# Rename our executable Python action
+ADD test.py /action/exec
 
-# Bundle app source (whatever we used to run our python app before containerisation)
-ADD . /src
-
-EXPOSE 8080
-
-CMD [ "python3", "/src/test.py" ]
+# Leave CMD as is for Openwhisk
+CMD ["/bin/bash", "-c", "cd actionProxy && python -u actionproxy.py"]

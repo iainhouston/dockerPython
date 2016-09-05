@@ -1,15 +1,20 @@
-from flask import Flask, jsonify, request
+#!/usr/bin/env python
 
-app = Flask(__name__)
+import sys
+import json
 
-@app.route('/init', methods=['POST'])
-def wsk_init():
-	return ''
+def main():
+	# accept multiple '--param's
+	params = json.loads(sys.argv[1])
+	# find 'myparam' if supplied on invocation
+	myparam = params.get('myparam', 'myparam default')
 
-@app.route('/run', methods=['POST'])
-def wsk_run():
-	params = request.get_json(force=True)
-	# jsonify wraps json.dumps
-	return jsonify(params)
+	# add or update 'myparam' with default or 
+	# what we were invoked with as a quoted string
+	params['myparam'] = '{}'.format(myparam)
 
-app.run(host='0.0.0.0', port=8080)
+	# output result of this action
+	print(json.dumps({ 'allparams' : params}))
+
+if __name__ == "__main__":
+	main()
