@@ -1,5 +1,6 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
+import os
 import sys
 import json
 
@@ -13,8 +14,11 @@ def main():
 	# what we were invoked with as a quoted string
 	params['myparam'] = '{}'.format(myparam)
 
+	pyVersion = '{}'.format(sys.version)
+	actVersion = '{}'.format(os.environ.get('REFRESHED_AT', 'no Dockerfile ENV'))
+	print('Action version: {}'.format(actVersion))
 	# output result of this action
-	print(json.dumps({ 'allparams' : params}))
+	print(json.dumps({ 'allparams' : params, 'python': pyVersion, 'actionVersion': actVersion}))
 
 if __name__ == "__main__":
 	main()
